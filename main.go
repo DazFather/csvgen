@@ -13,13 +13,15 @@ import (
 	"time"
 )
 
+type typeIdentifier = string
+
 const (
-	STRING_ID       = "STRING"
-	POSITIVE_INT_ID = "NUMBER"
-	ISO_TIME_ID     = "DATE"
-	ISO_TIME_T_ID   = "DATET"
-	HEXADECIMAL_ID  = "HEXA"
-	COLOR_ID        = "COLOR"
+	STRING_ID       typeIdentifier = "STRING"
+	POSITIVE_INT_ID                = "NUMBER"
+	ISO_TIME_ID                    = "DATE"
+	ISO_TIME_T_ID                  = "DATET"
+	HEXADECIMAL_ID                 = "HEXA"
+	COLOR_ID                       = "COLOR"
 )
 
 var HELP_TEXT = fmt.Sprint(
@@ -31,12 +33,12 @@ for example: 5 NUMBER DATE will generate 5 rows each with a random number and a 
 The number of rows is optional, when omitted the program will randomize it (between 1 and 30)
 
 The list of types currently avaiable is the following (Keep in mind that are case insensitive):`, "\n",
-	STRING_ID,       "\t - a random-lenght chars sequence of alfanumeric values\n",
+	STRING_ID,       "\t - a random-lenght sequence of random alfanumeric values\n",
 	POSITIVE_INT_ID, "\t - a random number between 1 and 100\n",
 	ISO_TIME_ID,     "\t - the today's date complete in ISO fomrmat (ex. 2006-01-02 15:04:05)\n",
 	ISO_TIME_T_ID,   "\t - like DATE but date and time are separated by a 'T' instead of ' '\n",
-	HEXADECIMAL_ID,  "\t - a random hexadecimal value of 128 bit\n",
-	COLOR_ID,        "\t - a random hexadecimal value of 6-chars preceded by '#'")
+	HEXADECIMAL_ID,  "\t - a random hexadecimal value of 32 chars\n",
+	COLOR_ID,        "\t - a random hexadecimal value of 6 chars preceded by '#'")
 
 func main() {
 	// length controls over program's args
@@ -77,33 +79,31 @@ func main() {
 	for i := 0; i < nRows; i++ {
 		file.WriteString(genRow(types, ", ") + "\n")
 	}
+  fmt.Println("Done!")
 }
 
 // genRow generates a row of random values for each type passed
-func genRow(types []string, joiner string) string {
-	var row []string
-	for _, selectedType := range types {
-		var value string
+func genRow(types []typeIdentifier, joiner string) string {
+	var row = make([]string, len(types))
+	for i, selectedType := range types {
 		switch strings.ToUpper(selectedType) {
 		case STRING_ID:
-			value = randstr.String(randInt(5, 10))
+			row[i] = randstr.String(randInt(5, 10))
 		case POSITIVE_INT_ID:
-			value = fmt.Sprint(randInt(1, 100))
+			row[i] = fmt.Sprint(randInt(1, 100))
 		case ISO_TIME_ID:
-			value = time.Now().Format("2006-01-02 15:04:05")
+			row[i] = time.Now().Format("2006-01-02 15:04:05")
 		case ISO_TIME_T_ID:
-			value = time.Now().Format("2006-01-02T15:04:05")
+			row[i] = time.Now().Format("2006-01-02T15:04:05")
 		case HEXADECIMAL_ID:
-			value = randstr.Hex(16)
+			row[i] = randstr.Hex(16)
 		case COLOR_ID:
-			value = "#" + randstr.Hex(16)[:6]
-
+			row[i] = "#" + randstr.Hex(3)
 		default:
-			arr := strings.Split(selectedType, ":")
-			ind := randInt(0, uint(len(arr)))
-			row = append(row, arr[ind])
+			values := strings.Split(selectedType, ":")
+			ind := randInt(0, uint(len(values)))
+			row[i] = values[ind]
 		}
-		row = append(row, value)
 	}
 	return strings.Join(row, joiner)
 }
