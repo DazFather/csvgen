@@ -1,6 +1,3 @@
-// Made by Davide Lavermicocca (aka DazFather)
-// Telegram: t.me/DazFather | GitHub: github.com/DazFather
-
 package main
 
 import (
