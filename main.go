@@ -44,12 +44,12 @@ func main() {
 	// length controls over program's args
 	if argSize := len(os.Args); argSize < 2 {
 		// Check if user did not insert any arguments when launching the program
-		fmt.Println("Too few values to generate anything\n Use -help to check how to use me")
-		return
+		log.Fatal("Too few values to generate anything\n Use -help to check how to use me")
 	} else if argSize == 2 {
 		// Check if user used help command
 		if match, _ := regexp.MatchString(`(?i)^-{0,2}help$`, os.Args[1]); match {
-			log.Fatal(HELP_TEXT)
+			fmt.Println(HELP_TEXT)
+			return
 		}
 	}
 
@@ -79,7 +79,7 @@ func main() {
 	for i := 0; i < nRows; i++ {
 		file.WriteString(genRow(types, ", ") + "\n")
 	}
-  fmt.Println("Done!")
+	fmt.Println("Done!")
 }
 
 // genRow generates a row of random values for each type passed
