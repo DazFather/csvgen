@@ -24,6 +24,8 @@ const (
 	COLOR_ID                       = "COLOR"
 )
 
+const CUSTOM_SEPARATOR = ":"
+
 var HELP_TEXT = fmt.Sprint(
 	`This program allows you to quickly create a CSV file called "generated.csv" with random values
 
@@ -33,12 +35,15 @@ for example: 5 NUMBER DATE will generate 5 rows each with a random number and a 
 The number of rows is optional, when omitted the program will randomize it (between 1 and 30)
 
 The list of types currently avaiable is the following (Keep in mind that are case insensitive):`, "\n",
-	STRING_ID,       "\t - a random-lenght sequence of random alfanumeric values\n",
+	STRING_ID, "\t - a random-lenght sequence of random alfanumeric values\n",
 	POSITIVE_INT_ID, "\t - a random number between 1 and 100\n",
-	ISO_TIME_ID,     "\t - the today's date complete in ISO fomrmat (ex. 2006-01-02 15:04:05)\n",
-	ISO_TIME_T_ID,   "\t - like DATE but date and time are separated by a 'T' instead of ' '\n",
-	HEXADECIMAL_ID,  "\t - a random hexadecimal value of 32 chars\n",
-	COLOR_ID,        "\t - a random hexadecimal value of 6 chars preceded by '#'")
+	ISO_TIME_ID, "\t - the today's date complete in ISO fomrmat (ex. 2006-01-02 15:04:05)\n",
+	ISO_TIME_T_ID, "\t - like DATE but date and time are separated by a 'T' instead of ' '\n",
+	HEXADECIMAL_ID, "\t - a random hexadecimal value of 32 chars\n",
+	COLOR_ID, "\t - a random hexadecimal value of 6 chars preceded by '#'\n", `
+Use '`, CUSTOM_SEPARATOR, `' to separate two or more custom strings as a type to choose randomly from from them.
+For example 'Pippo`, CUSTOM_SEPARATOR, "pluto", CUSTOM_SEPARATOR, `TOPOLINO' will make csvgen randomly pick one from 'Pippo', 'pluto' or 'TOPOLINO'.
+This time case is sensitive`)
 
 func main() {
 	// length controls over program's args
