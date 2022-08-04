@@ -105,9 +105,7 @@ func genRow(types []typeIdentifier, joiner string) string {
 		case COLOR_ID:
 			row[i] = "#" + randstr.Hex(3)
 		default:
-			values := strings.Split(selectedType, ":")
-			ind := randInt(0, uint(len(values)))
-			row[i] = values[ind]
+			row[i] = randValue(strings.Split(selectedType, CUSTOM_SEPARATOR))
 		}
 	}
 	return strings.Join(row, joiner)
@@ -117,4 +115,9 @@ func genRow(types []typeIdentifier, joiner string) string {
 func randInt(min, max uint) int {
 	minInt := int(min)
 	return rand.Intn(int(max)-minInt) + minInt
+}
+
+// randValue get one random value from a list of possible values
+func randValue(values []string) string {
+	return values[rand.Intn(len(values))]
 }
